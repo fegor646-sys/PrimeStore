@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none"><defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#F7DE8E"/><stop offset=".45" stop-color="#E3B94A"/>
+<stop offset=".7" stop-color="#B7860F"/><stop offset="1" stop-color="#F2D375"/>
+</linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#7B3BE8"/><stop offset="1" stop-color="#3C1685"/>
+</linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#241036"/><stop offset="1" stop-color="#0C0517"/>
+</linearGradient>
+</defs>
+<path d="M52 58h84v76a26 26 0 0 1-26 26H78a26 26 0 0 1-26-26z" fill="url(#d)" stroke="url(#g)" stroke-width="4"/>
+<path d="M136 76h16a20 20 0 0 1 0 40h-16" fill="none" stroke="url(#g)" stroke-width="5"/>
+<ellipse cx="94" cy="58" rx="42" ry="10" fill="url(#p)" stroke="url(#g)" stroke-width="3"/>
+<text x="94" y="118" font-family="Georgia,serif" font-size="20" font-weight="bold" fill="url(#g)" text-anchor="middle">PRIME</text>
+</svg>

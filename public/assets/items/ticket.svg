@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none"><defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#F7DE8E"/><stop offset=".45" stop-color="#E3B94A"/>
+<stop offset=".7" stop-color="#B7860F"/><stop offset="1" stop-color="#F2D375"/>
+</linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#7B3BE8"/><stop offset="1" stop-color="#3C1685"/>
+</linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#241036"/><stop offset="1" stop-color="#0C0517"/>
+</linearGradient>
+</defs>
+<path d="M28 66h144a10 10 0 0 1 10 10v14a14 14 0 0 0 0 28v14a10 10 0 0 1-10 10H28a10 10 0 0 1-10-10v-14a14 14 0 0 0 0-28V76a10 10 0 0 1 10-10z" fill="url(#p)" stroke="url(#g)" stroke-width="4"/>
+<path d="M100 70v60" stroke="url(#g)" stroke-width="3" stroke-dasharray="7 7" opacity=".8"/>
+<text x="62" y="112" font-family="Georgia,serif" font-size="22" font-weight="bold" fill="url(#g)" text-anchor="middle">PC</text>
+<circle cx="142" cy="100" r="20" fill="none" stroke="url(#g)" stroke-width="3"/>
+<text x="142" y="108" font-family="Georgia,serif" font-size="20" font-weight="bold" fill="url(#g)" text-anchor="middle">P</text>
+</svg>

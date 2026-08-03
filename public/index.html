@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+<title>PRIME STORE</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="icon-btn" id="menuBtn" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+      <img class="brand" src="assets/logo.png" alt="PRIME POKER CLUB" />
+      <button class="icon-btn bell" id="bellBtn" aria-label="Уведомления">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+        </svg>
+        <i class="dot" id="bellDot" hidden></i>
+      </button>
+    </header>
+
+    <main class="screen" id="screen"></main>
+
+    <nav class="tabbar" id="tabbar"></nav>
+  </div>
+
+  <div class="sheet-host" id="sheetHost"></div>
+  <div class="toast-host" id="toastHost"></div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

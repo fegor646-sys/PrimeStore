@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none"><defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#F7DE8E"/><stop offset=".45" stop-color="#E3B94A"/>
+<stop offset=".7" stop-color="#B7860F"/><stop offset="1" stop-color="#F2D375"/>
+</linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#7B3BE8"/><stop offset="1" stop-color="#3C1685"/>
+</linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#241036"/><stop offset="1" stop-color="#0C0517"/>
+</linearGradient>
+</defs>
+<rect x="20" y="54" width="160" height="92" rx="14" fill="url(#d)" stroke="url(#g)" stroke-width="5"/>
+<rect x="32" y="66" width="136" height="68" rx="9" fill="none" stroke="url(#g)" stroke-width="2" opacity=".5"/>
+<text x="100" y="112" font-family="Georgia,serif" font-size="32" font-weight="bold" fill="url(#g)" text-anchor="middle">PRIME</text>
+<circle cx="44" cy="42" r="5" fill="url(#g)"/><circle cx="156" cy="42" r="5" fill="url(#g)"/>
+<path d="M44 42v12M156 42v12" stroke="url(#g)" stroke-width="3"/>
+</svg>
