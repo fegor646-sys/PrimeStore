@@ -1,5 +1,5 @@
 /* ==========================================================
-   PRIME STORE — админ-панель
+   PRIME STORE — адмін-панель
    ========================================================== */
 
 const tg = window.Telegram?.WebApp;
@@ -79,7 +79,7 @@ function who(row) {
   }`;
 }
 
-/* ---------------- страницы ---------------- */
+/* ---------------- сторінки ---------------- */
 const PAGES = [
   { id: "orders", title: "Замовлення", badge: () => state.stats.pendingOrders },
   { id: "achievements", title: "Досягнення", badge: () => state.stats.pendingAchievements },
@@ -121,7 +121,7 @@ function renderShell(inner) {
 
 const empty = (text) => `<div class="empty">${text}</div>`;
 
-/* ---------------- заказы ---------------- */
+/* ---------------- замовлення ---------------- */
 function viewOrders() {
   if (!state.orders.length) return empty("Нових замовлень немає.");
   return state.orders
@@ -164,7 +164,7 @@ function bindOrders() {
   });
 }
 
-/* ---------------- достижения ---------------- */
+/* ---------------- досягнення ---------------- */
 const CATEGORY_TITLES = { combo: "🃏 Комбінація", tournament: "🏆 Турнір", knockouts: "💥 Нокаути", other: "📷 Інше досягнення" };
 
 function viewAchievements() {
@@ -202,8 +202,8 @@ function bindAchievements() {
   root.querySelectorAll("[data-approve]").forEach((btn) => {
     btn.onclick = () => {
       const id = btn.dataset.approve;
-      // Сумму администратор указывает сам — в ТЗ она не фиксирована и зависит
-      // от того, что именно игрок прислал на скриншоте.
+      // Суму адміністратор вказує сам — у ТЗ вона не фіксована і залежить
+      // від того, що саме гравець надіслав на скриншоті.
       const sheet = openSheet(`
         <h3>Нарахувати Prime Coin</h3>
         <p class="sheet-sub">Вкажіть, скільки Prime Coin нарахувати гравцю за це досягнення.</p>
@@ -248,7 +248,7 @@ function bindAchievements() {
   });
 }
 
-/* ---------------- заявки на покупку PC ---------------- */
+/* ---------------- заявки на купівлю PC ---------------- */
 function viewCoins() {
   if (!state.coinRequests.length) return empty("Заявок на купівлю Prime Coin немає.");
   return state.coinRequests
@@ -291,7 +291,7 @@ function bindCoins() {
   });
 }
 
-/* ---------------- CMS товаров ---------------- */
+/* ---------------- CMS товарів ---------------- */
 function viewItems() {
   const list = state.items
     .map(
@@ -370,8 +370,8 @@ function itemForm(item) {
     <button class="btn" id="f-save">Зберегти</button>`;
 }
 
-// Ужимаем картинку прямо в браузере: с телефона прилетают снимки на 4-6 МБ,
-// а в карточке товара всё равно показывается квадрат ~150 px.
+// Стискаємо зображення просто в браузері: з телефона прилітають знімки на 4-6 МБ,
+// а в картці товару все одно показується квадрат ~150 px.
 function shrinkImage(file, maxSide = 700) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -386,7 +386,7 @@ function shrinkImage(file, maxSide = 700) {
         canvas.height = Math.round(img.height * scale);
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        // PNG сохраняет прозрачность — она нужна иконкам товаров на тёмном фоне.
+        // PNG зберігає прозорість — вона потрібна іконкам товарів на темному тлі.
         const isPng = /png/i.test(file.type);
         resolve(canvas.toDataURL(isPng ? "image/png" : "image/jpeg", 0.86));
       };
@@ -396,8 +396,8 @@ function shrinkImage(file, maxSide = 700) {
   });
 }
 
-// Вешает загрузку фото на форму товара: кнопка → выбор файла → сжатие →
-// отправка на сервер → в поле пути подставляется адрес сохранённого файла.
+// Вішає завантаження фото на форму товару: кнопка → вибір файла → стиснення →
+// відправлення на сервер → у поле шляху підставляється адреса збереженого файла.
 function bindImageUpload(sheet) {
   const field = sheet.querySelector("#f-image");
   const preview = sheet.querySelector("#f-preview");
@@ -542,7 +542,7 @@ function bindItems() {
   });
 }
 
-/* ---------------- правила начисления ---------------- */
+/* ---------------- правила нарахування ---------------- */
 function viewRules() {
   const list = state.rules
     .map(
@@ -663,7 +663,7 @@ function bindRules() {
   });
 }
 
-/* ---------------- игроки и начисления ---------------- */
+/* ---------------- гравці та нарахування ---------------- */
 function viewUsers() {
   const list = state.users
     .map(
@@ -764,7 +764,7 @@ function bindUsers() {
   });
 }
 
-/* ---------------- настройки ---------------- */
+/* ---------------- налаштування ---------------- */
 function viewSettings() {
   const s = state.settings;
   return `
@@ -807,7 +807,7 @@ function bindSettings() {
   };
 }
 
-/* ---------------- загрузка ---------------- */
+/* ---------------- завантаження ---------------- */
 async function loadPage() {
   try {
     const overview = await api("/api/admin/overview");

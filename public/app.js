@@ -22,7 +22,7 @@ const screen = $("#screen");
 
 function initData() {
   const value = tg?.initData || "";
-  return value || "dev"; // "dev" работает только если на сервере задан DEV_USER_ID
+  return value || "dev"; // "dev" працює лише якщо на сервері задано DEV_USER_ID
 }
 
 async function api(path, { method = "GET", body } = {}) {
@@ -39,7 +39,7 @@ async function api(path, { method = "GET", body } = {}) {
   return data;
 }
 
-/* ---------------- утилиты ---------------- */
+/* ---------------- утиліти ---------------- */
 const fmt = (n) => Number(n || 0).toLocaleString("uk-UA");
 
 function fmtDate(iso) {
@@ -108,7 +108,7 @@ function closeSheet() {
   setTimeout(() => (host.innerHTML = ""), 220);
 }
 
-/* ---------------- шапка баланса ---------------- */
+/* ---------------- шапка балансу ---------------- */
 function balanceBlock() {
   const p = state.profile || {};
   return `
@@ -136,7 +136,7 @@ function priceBlock(item) {
   return `<div class="tile-price">${prefix}${old}${fmt(item.price)} <i class="pc-badge">PC</i></div>`;
 }
 
-/* ---------------- экран: главная ---------------- */
+/* ---------------- екран: головна ---------------- */
 function renderHome() {
   const tiles = state.items
     .map(
@@ -169,7 +169,7 @@ function renderHome() {
   });
 }
 
-/* ---------------- покупка товара ---------------- */
+/* ---------------- купівля товару ---------------- */
 function openItem(id) {
   const item = state.items.find((i) => i.id === id);
   if (!item) return;
@@ -249,7 +249,7 @@ function openItem(id) {
   };
 }
 
-/* ---------------- экран: баланс ---------------- */
+/* ---------------- екран: баланс ---------------- */
 // Блок «Як заробляти Prime Coin» — фіксований текст (не з бази), щоб гравець
 // завжди бачив повне й консистентне пояснення правил нарахування.
 function earnInfoBlock() {
@@ -345,7 +345,7 @@ function renderBalance() {
   screen.querySelector("#sendAchievement").onclick = openAchievementForm;
 }
 
-/* ---------------- покупка Prime Coin ---------------- */
+/* ---------------- купівля Prime Coin ---------------- */
 function openBuyCoins() {
   const rate = Number(state.settings.coin_rate) || 1;
   const sheet = openSheet(`
@@ -389,7 +389,7 @@ function openBuyCoins() {
   };
 }
 
-/* ---------------- форма достижения ---------------- */
+/* ---------------- форма досягнення ---------------- */
 function openAchievementForm() {
   const sheet = openSheet(`
     <h3>Відправити досягнення</h3>
@@ -457,7 +457,7 @@ function openAchievementForm() {
   };
 }
 
-/* ---------------- экран: акции ---------------- */
+/* ---------------- екран: акції ---------------- */
 function renderPromos() {
   const sale = state.items.filter((i) => i.onSale);
   screen.innerHTML = `
@@ -499,7 +499,7 @@ function renderPromos() {
   screen.querySelectorAll("[data-item]").forEach((el) => (el.onclick = () => openItem(el.dataset.item)));
 }
 
-/* ---------------- экран: история ---------------- */
+/* ---------------- екран: історія ---------------- */
 function renderHistory() {
   screen.innerHTML = `
     <div class="section-title"><span class="rhomb">◆</span>Історія операцій<span class="rhomb">◆</span></div>
@@ -520,7 +520,7 @@ function renderHistory() {
     }`;
 }
 
-/* ---------------- экран: профиль ---------------- */
+/* ---------------- екран: профіль ---------------- */
 function renderProfile() {
   const p = state.profile || {};
   screen.innerHTML = `
@@ -578,7 +578,7 @@ function renderProfile() {
   };
 }
 
-/* ---------------- навигация ---------------- */
+/* ---------------- навігація ---------------- */
 const TABS = [
   { id: "home", label: "ГОЛОВНА", icon: '<path d="M3 10.5 12 3l9 7.5V21H3z"/>' },
   { id: "balance", label: "БАЛАНС", icon: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M9 10h6"/>' },
