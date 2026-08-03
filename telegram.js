@@ -6,14 +6,14 @@ const ADMIN_IDS = (process.env.ADMIN_IDS || "")
   .map((s) => s.trim())
   .filter(Boolean);
 
-// В деве initData из браузера нет — DEV_USER_ID позволяет открыть Mini App
-// прямо в браузере. На проде переменную не задаём, и работает только Telegram.
+// У розробці initData з браузера немає — DEV_USER_ID дозволяє відкрити Mini App
+// просто в браузері. На проді змінну не задаємо, і працює лише Telegram.
 const DEV_USER_ID = process.env.DEV_USER_ID || "";
 
 /**
- * Проверяет initData от Telegram.WebApp. Это единственный надёжный способ
- * узнать, что запрос действительно от заявленного пользователя — telegramId
- * из тела запроса доверять нельзя.
+ * Перевіряє initData від Telegram.WebApp. Це єдиний надійний спосіб
+ * дізнатися, що запит справді від заявленого користувача — telegramId
+ * з тіла запиту довіряти не можна.
  * https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
  */
 function verifyInitData(initData) {
@@ -22,7 +22,7 @@ function verifyInitData(initData) {
   }
   if (!initData || typeof initData !== "string") return null;
   if (!BOT_TOKEN) {
-    console.warn("BOT_TOKEN не задан — проверить initData невозможно");
+    console.warn("BOT_TOKEN не задано — перевірити initData неможливо");
     return null;
   }
 
