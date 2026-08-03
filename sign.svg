@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none"><defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#F7DE8E"/><stop offset=".45" stop-color="#E3B94A"/>
+<stop offset=".7" stop-color="#B7860F"/><stop offset="1" stop-color="#F2D375"/>
+</linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#7B3BE8"/><stop offset="1" stop-color="#3C1685"/>
+</linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#241036"/><stop offset="1" stop-color="#0C0517"/>
+</linearGradient>
+</defs>
+<path d="M100 26l22 26 34-8-10 34 26 22-26 22 10 34-34-8-22 26-22-26-34 8 10-34-26-22 26-22-10-34 34 8z" fill="url(#p)" stroke="url(#g)" stroke-width="4"/>
+<text x="100" y="112" font-family="Georgia,serif" font-size="38" font-weight="bold" fill="url(#g)" text-anchor="middle">VIP</text>
+</svg>

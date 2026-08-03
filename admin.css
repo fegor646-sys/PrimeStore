@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none"><defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#F7DE8E"/><stop offset=".45" stop-color="#E3B94A"/>
+<stop offset=".7" stop-color="#B7860F"/><stop offset="1" stop-color="#F2D375"/>
+</linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#7B3BE8"/><stop offset="1" stop-color="#3C1685"/>
+</linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#241036"/><stop offset="1" stop-color="#0C0517"/>
+</linearGradient>
+</defs>
+<ellipse cx="100" cy="140" rx="54" ry="18" fill="#120722" stroke="url(#g)" stroke-width="3"/>
+<ellipse cx="100" cy="126" rx="54" ry="18" fill="url(#p)" stroke="url(#g)" stroke-width="3"/>
+<ellipse cx="100" cy="110" rx="54" ry="18" fill="#120722" stroke="url(#g)" stroke-width="3"/>
+<ellipse cx="100" cy="92" rx="54" ry="20" fill="url(#p)" stroke="url(#g)" stroke-width="4"/>
+<ellipse cx="100" cy="92" rx="30" ry="11" fill="none" stroke="url(#g)" stroke-width="3"/>
+<text x="100" y="98" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="url(#g)" text-anchor="middle">P</text>
+</svg>
