@@ -419,7 +419,7 @@ const purchase = db.transaction((telegramId, itemId, options = {}) => {
     VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?)
   `).run(user.id, item.id, label, variantLabel, quantity, price, now(), now());
 
-  applyBalance(user.id, -price, `Покупка: ${label}`, { type: "order", id: info.lastInsertRowid });
+  applyBalance(user.id, -price, `Купівля: ${label}`, { type: "order", id: info.lastInsertRowid });
 
   return {
     ok: true,
@@ -449,12 +449,12 @@ const setOrderStatus = db.transaction((orderId, status) => {
   if (!["pending", "done", "canceled"].includes(status)) return { ok: false, error: "bad_status" };
 
   if (status === "canceled" && order.status !== "canceled") {
-    applyBalance(order.userId, order.price, `Возврат: ${order.itemTitle}`, { type: "order-refund", id: order.id, counter: "refund" });
+    applyBalance(order.userId, order.price, `Повернення: ${order.itemTitle}`, { type: "order-refund", id: order.id, counter: "refund" });
   }
   if (order.status === "canceled" && status !== "canceled") {
     const user = getUser(order.userId);
     if (user.balance < order.price) return { ok: false, error: "insufficient_funds" };
-    applyBalance(order.userId, -order.price, `Повторное списание: ${order.itemTitle}`, { type: "order", id: order.id });
+    applyBalance(order.userId, -order.price, `Повторне списання: ${order.itemTitle}`, { type: "order", id: order.id });
   }
 
   db.prepare("UPDATE orders SET status = ?, updatedAt = ? WHERE id = ?").run(status, now(), order.id);
@@ -489,7 +489,7 @@ const resolveCoinRequest = db.transaction((requestId, status) => {
 
   db.prepare("UPDATE coin_requests SET status = ?, updatedAt = ? WHERE id = ?").run(status, now(), req.id);
   if (status === "approved") {
-    applyBalance(req.userId, req.amount, "Покупка Prime Coin", { type: "coin-request", id: req.id });
+    applyBalance(req.userId, req.amount, "Купівля Prime Coin", { type: "coin-request", id: req.id });
   }
   return { ok: true, request: db.prepare("SELECT * FROM coin_requests WHERE id = ?").get(req.id) };
 });
@@ -529,7 +529,7 @@ const resolveAchievement = db.transaction((id, { status, amount, title }) => {
   const awarded = status === "approved" ? Math.max(0, Math.round(Number(amount) || 0)) : 0;
   db.prepare("UPDATE achievements SET status = ?, awarded = ?, updatedAt = ? WHERE id = ?").run(status, awarded, now(), row.id);
   if (awarded > 0) {
-    applyBalance(row.userId, awarded, title || "Достижение подтверждено", { type: "achievement", id: row.id });
+    applyBalance(row.userId, awarded, title || "Досягнення підтверджено", { type: "achievement", id: row.id });
   }
   return { ok: true, achievement: db.prepare("SELECT * FROM achievements WHERE id = ?").get(row.id), awarded };
 });
@@ -564,7 +564,7 @@ function createEarnRule(data) {
   `).run(
     data.code || null,
     String(data.groupId || "custom"),
-    String(data.groupTitle || "Другое"),
+    String(data.groupTitle || "Інше"),
     Number(data.groupOrder) || 99,
     String(data.title),
     Number(data.amount) || 0,
@@ -602,7 +602,7 @@ function accrue(telegramId, type, baseAmount) {
   const coins = Math.floor((base * percent) / 100);
   if (coins <= 0) return { ok: false, error: "zero_amount" };
 
-  const label = type === "rake" ? `За рейк (${percent}% от ${base} грн)` : `За депозит (${percent}% от ${base} грн)`;
+  const label = type === "rake" ? `За рейк (${percent}% від ${base} грн)` : `За депозит (${percent}% від ${base} грн)`;
   const result = applyBalance(telegramId, coins, label, { type: `accrual-${type}` });
   return { ok: result.ok, coins, percent, base, user: result.user };
 }

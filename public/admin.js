@@ -19,7 +19,7 @@ const state = {
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const fmt = (n) => Number(n || 0).toLocaleString("ru-RU");
+const fmt = (n) => Number(n || 0).toLocaleString("uk-UA");
 
 function initData() {
   return tg?.initData || "dev";
@@ -46,12 +46,12 @@ function toast(msg, kind = "") {
 }
 
 function fail(err) {
-  toast(err?.error === "not_admin" ? "Нет прав администратора" : "Не удалось выполнить действие", "bad");
+  toast(err?.error === "not_admin" ? "Немає прав адміністратора" : "Не вдалося виконати дію", "bad");
 }
 
 function fmtDateTime(iso) {
   try {
-    return new Date(iso).toLocaleString("ru-RU", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+    return new Date(iso).toLocaleString("uk-UA", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
   } catch (e) {
     return "";
   }
@@ -72,34 +72,34 @@ function closeSheet() {
 }
 
 function who(row) {
-  const name = row.firstName || "Игрок";
-  const uname = row.username ? `@${row.username}` : "без юзернейма";
+  const name = row.firstName || "Гравець";
+  const uname = row.username ? `@${row.username}` : "без юзернейму";
   return `${esc(name)} (${esc(uname)})<br/>Telegram ID: <code>${esc(row.userId)}</code>${
-    row.playerId ? ` · ID в клубе: <code>${esc(row.playerId)}</code>` : ""
+    row.playerId ? ` · ID у клубі: <code>${esc(row.playerId)}</code>` : ""
   }`;
 }
 
 /* ---------------- страницы ---------------- */
 const PAGES = [
-  { id: "orders", title: "Заказы", badge: () => state.stats.pendingOrders },
-  { id: "achievements", title: "Достижения", badge: () => state.stats.pendingAchievements },
-  { id: "coins", title: "Покупка PC", badge: () => state.stats.pendingCoinRequests },
-  { id: "items", title: "Товары" },
-  { id: "rules", title: "Начисления" },
-  { id: "users", title: "Игроки" },
-  { id: "settings", title: "Настройки" },
+  { id: "orders", title: "Замовлення", badge: () => state.stats.pendingOrders },
+  { id: "achievements", title: "Досягнення", badge: () => state.stats.pendingAchievements },
+  { id: "coins", title: "Купівля PC", badge: () => state.stats.pendingCoinRequests },
+  { id: "items", title: "Товари" },
+  { id: "rules", title: "Нарахування" },
+  { id: "users", title: "Гравці" },
+  { id: "settings", title: "Налаштування" },
 ];
 
 function renderShell(inner) {
   root.innerHTML = `
     <div class="admin-head">
-      <h1>PRIME STORE · АДМИН</h1>
-      <a href="index.html">← в магазин</a>
+      <h1>PRIME STORE · АДМІН</h1>
+      <a href="index.html">← у магазин</a>
     </div>
     <div class="stats">
-      <div class="stat"><b>${fmt(state.stats.users)}</b><span>Игроков</span></div>
-      <div class="stat"><b>${fmt(state.stats.coinsInCirculation)}</b><span>PC в обороте</span></div>
-      <div class="stat"><b>${fmt(state.stats.activeItems)}</b><span>Товаров в продаже</span></div>
+      <div class="stat"><b>${fmt(state.stats.users)}</b><span>Гравців</span></div>
+      <div class="stat"><b>${fmt(state.stats.coinsInCirculation)}</b><span>PC в обігу</span></div>
+      <div class="stat"><b>${fmt(state.stats.activeItems)}</b><span>Товарів у продажу</span></div>
     </div>
     <div class="nav">
       ${PAGES.map((p) => {
@@ -123,7 +123,7 @@ const empty = (text) => `<div class="empty">${text}</div>`;
 
 /* ---------------- заказы ---------------- */
 function viewOrders() {
-  if (!state.orders.length) return empty("Новых заказов нет.");
+  if (!state.orders.length) return empty("Нових замовлень немає.");
   return state.orders
     .map(
       (o) => `
@@ -133,13 +133,13 @@ function viewOrders() {
           <div class="rec-title">#${o.id} · ${esc(o.itemTitle)}</div>
           <div class="rec-meta">${who(o)}<br/>${fmtDateTime(o.createdAt)} · списано <b>${fmt(o.price)} PC</b></div>
         </div>
-        <span class="chip ${o.status}">${esc({ pending: "В обработке", done: "Выполнен", canceled: "Отменён" }[o.status])}</span>
+        <span class="chip ${o.status}">${esc({ pending: "В обробці", done: "Виконано", canceled: "Скасовано" }[o.status])}</span>
       </div>
       ${
         o.status === "pending"
           ? `<div class="rec-actions">
-              <button class="btn" data-order="${o.id}" data-status="done">Выдать</button>
-              <button class="btn ghost" data-order="${o.id}" data-status="canceled">Отменить</button>
+              <button class="btn" data-order="${o.id}" data-status="done">Видати</button>
+              <button class="btn ghost" data-order="${o.id}" data-status="canceled">Скасувати</button>
             </div>`
           : ""
       }
@@ -154,7 +154,7 @@ function bindOrders() {
       btn.disabled = true;
       try {
         await api(`/api/admin/orders/${btn.dataset.order}/status`, { method: "POST", body: { status: btn.dataset.status } });
-        toast(btn.dataset.status === "done" ? "Заказ выдан" : "Заказ отменён, Prime Coin возвращены", "good");
+        toast(btn.dataset.status === "done" ? "Замовлення видано" : "Замовлення скасовано, Prime Coin повернено", "good");
         loadPage();
       } catch (err) {
         btn.disabled = false;
@@ -165,10 +165,10 @@ function bindOrders() {
 }
 
 /* ---------------- достижения ---------------- */
-const CATEGORY_TITLES = { combo: "🃏 Комбинация", tournament: "🏆 Турнир", knockouts: "💥 Нокауты", other: "📷 Другое достижение" };
+const CATEGORY_TITLES = { combo: "🃏 Комбінація", tournament: "🏆 Турнір", knockouts: "💥 Нокаути", other: "📷 Інше досягнення" };
 
 function viewAchievements() {
-  if (!state.achievements.length) return empty("Заявок на проверке нет.");
+  if (!state.achievements.length) return empty("Заявок на перевірці немає.");
   return state.achievements
     .map(
       (a) => `
@@ -177,20 +177,20 @@ function viewAchievements() {
         <div>
           <div class="rec-title">#${a.id} · ${esc(CATEGORY_TITLES[a.category] || a.category)}</div>
           <div class="rec-meta">${who(a)}<br/>${fmtDateTime(a.createdAt)}${
-        a.comment ? `<br/>Комментарий: ${esc(a.comment)}` : ""
+        a.comment ? `<br/>Коментар: ${esc(a.comment)}` : ""
       }</div>
         </div>
-        <span class="chip ${a.status}">${esc({ pending: "На проверке", approved: "Одобрено", rejected: "Отклонено" }[a.status])}</span>
+        <span class="chip ${a.status}">${esc({ pending: "На перевірці", approved: "Схвалено", rejected: "Відхилено" }[a.status])}</span>
       </div>
       ${a.photo ? `<img class="rec-shot" src="${esc(a.photo)}" alt="Скриншот" />` : ""}
       ${
         a.status === "pending"
           ? `<div class="rec-actions">
-              <button class="btn" data-approve="${a.id}">Одобрить и начислить</button>
-              <button class="btn ghost" data-reject="${a.id}">Отклонить</button>
+              <button class="btn" data-approve="${a.id}">Схвалити й нарахувати</button>
+              <button class="btn ghost" data-reject="${a.id}">Відхилити</button>
             </div>`
           : a.awarded
-          ? `<div class="rec-meta">Начислено: <b>${fmt(a.awarded)} PC</b></div>`
+          ? `<div class="rec-meta">Нараховано: <b>${fmt(a.awarded)} PC</b></div>`
           : ""
       }
     </div>`
@@ -205,14 +205,14 @@ function bindAchievements() {
       // Сумму администратор указывает сам — в ТЗ она не фиксирована и зависит
       // от того, что именно игрок прислал на скриншоте.
       const sheet = openSheet(`
-        <h3>Начислить Prime Coin</h3>
-        <p class="sheet-sub">Укажите, сколько Prime Coin начислить игроку за это достижение.</p>
+        <h3>Нарахувати Prime Coin</h3>
+        <p class="sheet-sub">Вкажіть, скільки Prime Coin нарахувати гравцю за це досягнення.</p>
         <div class="quick" id="presets">
           ${[10, 25, 40, 50, 100, 150, 180, 200].map((n) => `<button data-n="${n}">${n}</button>`).join("")}
         </div>
-        <label class="field"><span>Количество Prime Coin</span><input type="number" id="amount" value="50" min="0" /></label>
-        <label class="field"><span>Подпись в истории игрока</span><input id="title" value="Достижение подтверждено" /></label>
-        <button class="btn" id="save">Одобрить и начислить</button>
+        <label class="field"><span>Кількість Prime Coin</span><input type="number" id="amount" value="50" min="0" /></label>
+        <label class="field"><span>Підпис в історії гравця</span><input id="title" value="Досягнення підтверджено" /></label>
+        <button class="btn" id="save">Схвалити й нарахувати</button>
       `);
       sheet.querySelectorAll("#presets button").forEach((b) => (b.onclick = () => (sheet.querySelector("#amount").value = b.dataset.n)));
       sheet.querySelector("#save").onclick = async (e) => {
@@ -223,7 +223,7 @@ function bindAchievements() {
             body: { status: "approved", amount: sheet.querySelector("#amount").value, title: sheet.querySelector("#title").value },
           });
           closeSheet();
-          toast("Достижение подтверждено", "good");
+          toast("Досягнення підтверджено", "good");
           loadPage();
         } catch (err) {
           e.target.disabled = false;
@@ -238,7 +238,7 @@ function bindAchievements() {
       btn.disabled = true;
       try {
         await api(`/api/admin/achievements/${btn.dataset.reject}/resolve`, { method: "POST", body: { status: "rejected" } });
-        toast("Заявка отклонена");
+        toast("Заявку відхилено");
         loadPage();
       } catch (err) {
         btn.disabled = false;
@@ -250,7 +250,7 @@ function bindAchievements() {
 
 /* ---------------- заявки на покупку PC ---------------- */
 function viewCoins() {
-  if (!state.coinRequests.length) return empty("Заявок на покупку Prime Coin нет.");
+  if (!state.coinRequests.length) return empty("Заявок на купівлю Prime Coin немає.");
   return state.coinRequests
     .map(
       (r) => `
@@ -258,15 +258,15 @@ function viewCoins() {
       <div class="rec-top">
         <div>
           <div class="rec-title">#${r.id} · ${fmt(r.amount)} PC</div>
-          <div class="rec-meta">${who(r)}<br/>${fmtDateTime(r.createdAt)} · к оплате <b>${fmt(r.payAmount)} грн</b></div>
+          <div class="rec-meta">${who(r)}<br/>${fmtDateTime(r.createdAt)} · до сплати <b>${fmt(r.payAmount)} грн</b></div>
         </div>
-        <span class="chip ${r.status}">${esc({ pending: "Ожидает оплаты", approved: "Оплачено", rejected: "Отклонено" }[r.status])}</span>
+        <span class="chip ${r.status}">${esc({ pending: "Очікує оплати", approved: "Оплачено", rejected: "Відхилено" }[r.status])}</span>
       </div>
       ${
         r.status === "pending"
           ? `<div class="rec-actions">
-              <button class="btn" data-coin="${r.id}" data-status="approved">Оплата получена</button>
-              <button class="btn ghost" data-coin="${r.id}" data-status="rejected">Отклонить</button>
+              <button class="btn" data-coin="${r.id}" data-status="approved">Оплату отримано</button>
+              <button class="btn ghost" data-coin="${r.id}" data-status="rejected">Відхилити</button>
             </div>`
           : ""
       }
@@ -281,7 +281,7 @@ function bindCoins() {
       btn.disabled = true;
       try {
         await api(`/api/admin/coin-requests/${btn.dataset.coin}/resolve`, { method: "POST", body: { status: btn.dataset.status } });
-        toast(btn.dataset.status === "approved" ? "Prime Coin начислены" : "Заявка отклонена", "good");
+        toast(btn.dataset.status === "approved" ? "Prime Coin нараховано" : "Заявку відхилено", "good");
         loadPage();
       } catch (err) {
         btn.disabled = false;
@@ -300,24 +300,24 @@ function viewItems() {
       <div class="item-row">
         <img src="${esc(i.image || "assets/items/vip.svg")}" alt="" />
         <div>
-          <div class="rec-title">${esc(i.title)}${i.active ? "" : " · скрыт"}</div>
-          <div class="rec-meta">${esc(i.subtitle || "")}${i.onSale ? ` · <b style="color:var(--gold)">акция активна</b>` : ""}${
-        i.salePrice != null && !i.onSale ? " · акция запланирована/завершена" : ""
+          <div class="rec-title">${esc(i.title)}${i.active ? "" : " · приховано"}</div>
+          <div class="rec-meta">${esc(i.subtitle || "")}${i.onSale ? ` · <b style="color:var(--gold)">акція активна</b>` : ""}${
+        i.salePrice != null && !i.onSale ? " · акція запланована/завершена" : ""
       }</div>
         </div>
         <div class="price">${i.onSale ? `<span class="old">${fmt(i.basePrice)}</span>` : ""}${fmt(i.price)} PC</div>
       </div>
       <div class="rec-actions">
-        <button class="btn secondary" data-edit="${esc(i.id)}">Редактировать</button>
-        <button class="btn ghost" data-toggle="${esc(i.id)}">${i.active ? "Скрыть" : "Показать"}</button>
-        <button class="btn ghost" data-del="${esc(i.id)}">Удалить</button>
+        <button class="btn secondary" data-edit="${esc(i.id)}">Редагувати</button>
+        <button class="btn ghost" data-toggle="${esc(i.id)}">${i.active ? "Приховати" : "Показати"}</button>
+        <button class="btn ghost" data-del="${esc(i.id)}">Видалити</button>
       </div>
     </div>`
     )
     .join("");
 
-  return `<div class="toolbar"><button class="btn" id="addItem">+ Новый товар</button></div>${
-    list || empty("Товаров пока нет.")
+  return `<div class="toolbar"><button class="btn" id="addItem">+ Новий товар</button></div>${
+    list || empty("Товарів поки немає.")
   }`;
 }
 
@@ -325,49 +325,49 @@ function itemForm(item) {
   const v = item || { kind: "simple", price: 0, active: true, meta: {} };
   const dt = (s) => (s ? String(s).slice(0, 16) : "");
   return `
-    <h3>${item ? "Редактировать товар" : "Новый товар"}</h3>
-    <p class="sheet-sub">Изменения появляются в приложении сразу после сохранения.</p>
-    <label class="field"><span>Название</span><input id="f-title" value="${esc(v.title || "")}" /></label>
-    <label class="field"><span>Подпись под названием</span><input id="f-subtitle" value="${esc(v.subtitle || "")}" /></label>
-    <label class="field"><span>Описание (необязательно)</span><textarea id="f-description">${esc(v.description || "")}</textarea></label>
+    <h3>${item ? "Редагувати товар" : "Новий товар"}</h3>
+    <p class="sheet-sub">Зміни з'являються в застосунку одразу після збереження.</p>
+    <label class="field"><span>Назва</span><input id="f-title" value="${esc(v.title || "")}" /></label>
+    <label class="field"><span>Підпис під назвою</span><input id="f-subtitle" value="${esc(v.subtitle || "")}" /></label>
+    <label class="field"><span>Опис (необов'язково)</span><textarea id="f-description">${esc(v.description || "")}</textarea></label>
     <div class="grid2">
-      <label class="field"><span>Цена, PC</span><input type="number" id="f-price" value="${v.basePrice ?? v.price ?? 0}" min="0" /></label>
-      <label class="field"><span>Порядок показа</span><input type="number" id="f-order" value="${v.sortOrder ?? 0}" /></label>
+      <label class="field"><span>Ціна, PC</span><input type="number" id="f-price" value="${v.basePrice ?? v.price ?? 0}" min="0" /></label>
+      <label class="field"><span>Порядок показу</span><input type="number" id="f-order" value="${v.sortOrder ?? 0}" /></label>
     </div>
-    <label class="field"><span>Тип карточки</span>
+    <label class="field"><span>Тип картки</span>
       <select id="f-kind">
-        <option value="simple"${v.kind === "simple" ? " selected" : ""}>Обычный товар</option>
-        <option value="variant"${v.kind === "variant" ? " selected" : ""}>С выбором номинала</option>
-        <option value="amount"${v.kind === "amount" ? " selected" : ""}>С вводом количества</option>
+        <option value="simple"${v.kind === "simple" ? " selected" : ""}>Звичайний товар</option>
+        <option value="variant"${v.kind === "variant" ? " selected" : ""}>З вибором номіналу</option>
+        <option value="amount"${v.kind === "amount" ? " selected" : ""}>З введенням кількості</option>
         <option value="slot"${v.kind === "slot" ? " selected" : ""}>Прокрут Mystery Slot</option>
       </select></label>
-    <div class="section-title"><span class="rhomb">◆</span>Фото товара<span class="rhomb">◆</span></div>
+    <div class="section-title"><span class="rhomb">◆</span>Фото товару<span class="rhomb">◆</span></div>
     <img class="preview" id="f-preview" src="${esc(v.image || "assets/items/vip.svg")}" alt="" />
     <div class="toolbar">
-      <button type="button" class="btn secondary" id="f-pick">Загрузить фото</button>
-      <button type="button" class="btn ghost" id="f-clear">Убрать фото</button>
+      <button type="button" class="btn secondary" id="f-pick">Завантажити фото</button>
+      <button type="button" class="btn ghost" id="f-clear">Прибрати фото</button>
     </div>
     <input type="file" id="f-file" accept="image/*" hidden />
-    <p class="hint">Фото сжимается автоматически. Можно вместо загрузки вписать путь или ссылку вручную.</p>
-    <label class="field"><span>Путь или ссылка на изображение</span><input id="f-image" value="${esc(v.image || "")}" placeholder="assets/items/vip.svg" /></label>
-    <label class="field"><span>Номиналы / параметры (JSON, необязательно)</span>
+    <p class="hint">Фото стискається автоматично. Можна замість завантаження вписати шлях або посилання вручну.</p>
+    <label class="field"><span>Шлях або посилання на зображення</span><input id="f-image" value="${esc(v.image || "")}" placeholder="assets/items/vip.svg" /></label>
+    <label class="field"><span>Номінали / параметри (JSON, необов'язково)</span>
       <textarea id="f-meta" placeholder='{"variants":[{"label":"110 UAH","price":110}]}'>${esc(
         v.meta && Object.keys(v.meta).length ? JSON.stringify(v.meta, null, 2) : ""
       )}</textarea></label>
 
-    <div class="section-title"><span class="rhomb">◆</span>Акция<span class="rhomb">◆</span></div>
-    <p class="hint">Оставьте акционную цену пустой, чтобы отключить акцию. После даты окончания цена возвращается к обычной автоматически.</p>
-    <label class="field"><span>Акционная цена, PC</span><input type="number" id="f-sale" value="${v.salePrice ?? ""}" min="0" /></label>
+    <div class="section-title"><span class="rhomb">◆</span>Акція<span class="rhomb">◆</span></div>
+    <p class="hint">Залиште акційну ціну порожньою, щоб вимкнути акцію. Після дати завершення ціна повертається до звичайної автоматично.</p>
+    <label class="field"><span>Акційна ціна, PC</span><input type="number" id="f-sale" value="${v.salePrice ?? ""}" min="0" /></label>
     <div class="grid2">
-      <label class="field"><span>Начало акции</span><input type="datetime-local" id="f-saleStart" value="${dt(v.saleStart)}" /></label>
-      <label class="field"><span>Окончание акции</span><input type="datetime-local" id="f-saleEnd" value="${dt(v.saleEnd)}" /></label>
+      <label class="field"><span>Початок акції</span><input type="datetime-local" id="f-saleStart" value="${dt(v.saleStart)}" /></label>
+      <label class="field"><span>Завершення акції</span><input type="datetime-local" id="f-saleEnd" value="${dt(v.saleEnd)}" /></label>
     </div>
     <label class="field"><span>Статус</span>
       <select id="f-active">
-        <option value="1"${v.active ? " selected" : ""}>Активен</option>
-        <option value="0"${v.active ? "" : " selected"}>Скрыт</option>
+        <option value="1"${v.active ? " selected" : ""}>Активний</option>
+        <option value="0"${v.active ? "" : " selected"}>Прихований</option>
       </select></label>
-    <button class="btn" id="f-save">Сохранить</button>`;
+    <button class="btn" id="f-save">Зберегти</button>`;
 }
 
 // Ужимаем картинку прямо в браузере: с телефона прилетают снимки на 4-6 МБ,
@@ -417,23 +417,23 @@ function bindImageUpload(sheet) {
   file.onchange = async () => {
     const chosen = file.files[0];
     if (!chosen) return;
-    if (chosen.size > 12 * 1024 * 1024) return toast("Файл слишком большой, выберите другой", "bad");
+    if (chosen.size > 12 * 1024 * 1024) return toast("Файл занадто великий, оберіть інший", "bad");
 
     pick.disabled = true;
-    pick.textContent = "Загружаем…";
+    pick.textContent = "Завантажуємо…";
     try {
       const image = await shrinkImage(chosen);
       preview.src = image;
       const data = await api("/api/admin/upload", { method: "POST", body: { image, replace: startedWith } });
       field.value = data.path;
       preview.src = data.path + "?v=" + Date.now();
-      toast("Фото загружено", "good");
+      toast("Фото завантажено", "good");
     } catch (err) {
       preview.src = field.value || "assets/items/vip.svg";
-      toast("Не удалось загрузить фото", "bad");
+      toast("Не вдалося завантажити фото", "bad");
     } finally {
       pick.disabled = false;
-      pick.textContent = "Загрузить фото";
+      pick.textContent = "Завантажити фото";
       file.value = "";
     }
   };
@@ -447,7 +447,7 @@ function collectItemForm(sheet) {
     try {
       meta = JSON.parse(rawMeta);
     } catch (e) {
-      toast("Проверьте JSON в поле номиналов", "bad");
+      toast("Перевірте JSON у полі номіналів", "bad");
       return null;
     }
   }
@@ -475,12 +475,12 @@ function bindItems() {
     sheet.querySelector("#f-save").onclick = async (e) => {
       const body = collectItemForm(sheet);
       if (!body) return;
-      if (!body.title) return toast("Укажите название", "bad");
+      if (!body.title) return toast("Вкажіть назву", "bad");
       e.target.disabled = true;
       try {
         await api("/api/admin/items", { method: "POST", body });
         closeSheet();
-        toast("Товар добавлен", "good");
+        toast("Товар додано", "good");
         loadPage();
       } catch (err) {
         e.target.disabled = false;
@@ -501,7 +501,7 @@ function bindItems() {
         try {
           await api(`/api/admin/items/${encodeURIComponent(item.id)}`, { method: "PUT", body });
           closeSheet();
-          toast("Изменения сохранены", "good");
+          toast("Зміни збережено", "good");
           loadPage();
         } catch (err) {
           e.target.disabled = false;
@@ -517,7 +517,7 @@ function bindItems() {
       btn.disabled = true;
       try {
         await api(`/api/admin/items/${encodeURIComponent(item.id)}`, { method: "PUT", body: { active: !item.active } });
-        toast(item.active ? "Товар скрыт" : "Товар снова в продаже", "good");
+        toast(item.active ? "Товар приховано" : "Товар знову в продажу", "good");
         loadPage();
       } catch (err) {
         btn.disabled = false;
@@ -528,11 +528,11 @@ function bindItems() {
 
   root.querySelectorAll("[data-del]").forEach((btn) => {
     btn.onclick = async () => {
-      if (!confirm("Удалить товар навсегда? Лучше скрыть его — тогда историю заказов будет проще читать.")) return;
+      if (!confirm("Видалити товар назавжди? Краще приховати його — тоді історію замовлень буде простіше читати.")) return;
       btn.disabled = true;
       try {
         await api(`/api/admin/items/${encodeURIComponent(btn.dataset.del)}`, { method: "DELETE" });
-        toast("Товар удалён");
+        toast("Товар видалено");
         loadPage();
       } catch (err) {
         btn.disabled = false;
@@ -551,35 +551,35 @@ function viewRules() {
       <div class="item-row" style="grid-template-columns:1fr auto">
         <div>
           <div class="rec-title">${esc(r.title)}</div>
-          <div class="rec-meta">${esc(r.groupTitle)}${r.active ? "" : " · скрыто"}</div>
+          <div class="rec-meta">${esc(r.groupTitle)}${r.active ? "" : " · приховано"}</div>
         </div>
         <div class="price">${fmt(r.amount)} PC</div>
       </div>
       <div class="rec-actions">
-        <button class="btn secondary" data-rule-edit="${r.id}">Редактировать</button>
-        <button class="btn ghost" data-rule-toggle="${r.id}">${r.active ? "Скрыть" : "Показать"}</button>
-        <button class="btn ghost" data-rule-del="${r.id}">Удалить</button>
+        <button class="btn secondary" data-rule-edit="${r.id}">Редагувати</button>
+        <button class="btn ghost" data-rule-toggle="${r.id}">${r.active ? "Приховати" : "Показати"}</button>
+        <button class="btn ghost" data-rule-del="${r.id}">Видалити</button>
       </div>
     </div>`
     )
     .join("");
-  return `<div class="toolbar"><button class="btn" id="addRule">+ Новый способ заработка</button></div>${
-    list || empty("Правил пока нет.")
+  return `<div class="toolbar"><button class="btn" id="addRule">+ Новий спосіб заробітку</button></div>${
+    list || empty("Правил поки немає.")
   }`;
 }
 
 function ruleForm(rule) {
-  const v = rule || { groupTitle: "Другое", amount: 0, active: true, sortOrder: 0 };
+  const v = rule || { groupTitle: "Інше", amount: 0, active: true, sortOrder: 0 };
   return `
-    <h3>${rule ? "Редактировать" : "Новый способ заработка"}</h3>
-    <p class="sheet-sub">Строка появится на экране «Заработать Prime Coin» — так добавляются новые достижения, задания и миссии.</p>
-    <label class="field"><span>Раздел</span><input id="r-group" value="${esc(v.groupTitle)}" placeholder="Hold'em / Турниры / Ежедневные задания" /></label>
-    <label class="field"><span>Название</span><input id="r-title" value="${esc(v.title || "")}" /></label>
+    <h3>${rule ? "Редагувати" : "Новий спосіб заробітку"}</h3>
+    <p class="sheet-sub">Рядок з'явиться на екрані «Отримати Prime Coin» — так додаються нові досягнення, завдання й місії.</p>
+    <label class="field"><span>Розділ</span><input id="r-group" value="${esc(v.groupTitle)}" placeholder="Hold'em / Турніри / Щоденні завдання" /></label>
+    <label class="field"><span>Назва</span><input id="r-title" value="${esc(v.title || "")}" /></label>
     <div class="grid2">
-      <label class="field"><span>Награда, PC</span><input type="number" id="r-amount" value="${v.amount}" min="0" /></label>
+      <label class="field"><span>Нагорода, PC</span><input type="number" id="r-amount" value="${v.amount}" min="0" /></label>
       <label class="field"><span>Порядок</span><input type="number" id="r-order" value="${v.sortOrder}" /></label>
     </div>
-    <button class="btn" id="r-save">Сохранить</button>`;
+    <button class="btn" id="r-save">Зберегти</button>`;
 }
 
 function bindRules() {
@@ -587,10 +587,10 @@ function bindRules() {
     const sheet = openSheet(ruleForm(null));
     sheet.querySelector("#r-save").onclick = async (e) => {
       const title = sheet.querySelector("#r-title").value.trim();
-      if (!title) return toast("Укажите название", "bad");
+      if (!title) return toast("Вкажіть назву", "bad");
       e.target.disabled = true;
       try {
-        const groupTitle = sheet.querySelector("#r-group").value.trim() || "Другое";
+        const groupTitle = sheet.querySelector("#r-group").value.trim() || "Інше";
         await api("/api/admin/earn-rules", {
           method: "POST",
           body: {
@@ -602,7 +602,7 @@ function bindRules() {
           },
         });
         closeSheet();
-        toast("Добавлено", "good");
+        toast("Додано", "good");
         loadPage();
       } catch (err) {
         e.target.disabled = false;
@@ -628,7 +628,7 @@ function bindRules() {
             },
           });
           closeSheet();
-          toast("Сохранено", "good");
+          toast("Збережено", "good");
           loadPage();
         } catch (err) {
           e.target.disabled = false;
@@ -652,7 +652,7 @@ function bindRules() {
 
   root.querySelectorAll("[data-rule-del]").forEach((btn) => {
     btn.onclick = async () => {
-      if (!confirm("Удалить строку?")) return;
+      if (!confirm("Видалити рядок?")) return;
       try {
         await api(`/api/admin/earn-rules/${btn.dataset.ruleDel}`, { method: "DELETE" });
         loadPage();
@@ -671,21 +671,21 @@ function viewUsers() {
     <div class="rec">
       <div class="item-row" style="grid-template-columns:1fr auto">
         <div>
-          <div class="rec-title">${esc(u.firstName || "Игрок")} ${u.username ? esc("@" + u.username) : ""}</div>
-          <div class="rec-meta">Telegram ID: <code>${esc(u.id)}</code>${u.playerId ? ` · ID в клубе: <code>${esc(u.playerId)}</code>` : ""}</div>
+          <div class="rec-title">${esc(u.firstName || "Гравець")} ${u.username ? esc("@" + u.username) : ""}</div>
+          <div class="rec-meta">Telegram ID: <code>${esc(u.id)}</code>${u.playerId ? ` · ID у клубі: <code>${esc(u.playerId)}</code>` : ""}</div>
         </div>
         <div class="price">${fmt(u.balance)} PC</div>
       </div>
       <div class="rec-actions">
-        <button class="btn secondary" data-accrue="${esc(u.id)}">Начислить</button>
+        <button class="btn secondary" data-accrue="${esc(u.id)}">Нарахувати</button>
       </div>
     </div>`
     )
     .join("");
 
   return `
-    <label class="field"><span>Поиск по имени, юзернейму или ID</span><input id="userSearch" placeholder="Начните вводить…" /></label>
-    ${list || empty("Игроки не найдены.")}`;
+    <label class="field"><span>Пошук за іменем, юзернеймом або ID</span><input id="userSearch" placeholder="Почніть вводити…" /></label>
+    ${list || empty("Гравців не знайдено.")}`;
 }
 
 function bindUsers() {
@@ -714,29 +714,29 @@ function bindUsers() {
       const userId = btn.dataset.accrue;
       const s = state.settings;
       const sheet = openSheet(`
-        <h3>Начислить Prime Coin</h3>
-        <p class="sheet-sub">За рейк и депозит сумма считается автоматически: ${s.rake_percent || 5}% и ${
+        <h3>Нарахувати Prime Coin</h3>
+        <p class="sheet-sub">За рейк і депозит сума рахується автоматично: ${s.rake_percent || 5}% і ${
         s.deposit_percent || 5
-      }% соответственно.</p>
-        <label class="field"><span>Тип начисления</span>
+      }% відповідно.</p>
+        <label class="field"><span>Тип нарахування</span>
           <select id="a-mode">
-            <option value="rake">За рейк (${s.rake_percent || 5}% от суммы)</option>
-            <option value="deposit">За депозит (${s.deposit_percent || 5}% от суммы)</option>
-            <option value="manual">Вручную (точное количество PC)</option>
+            <option value="rake">За рейк (${s.rake_percent || 5}% від суми)</option>
+            <option value="deposit">За депозит (${s.deposit_percent || 5}% від суми)</option>
+            <option value="manual">Вручну (точна кількість PC)</option>
           </select></label>
-        <label class="field"><span id="a-label">Сумма рейка, грн</span><input type="number" id="a-value" value="1000" /></label>
-        <label class="field" id="a-reason-field" hidden><span>Подпись в истории</span><input id="a-reason" value="Начисление администратором" /></label>
-        <button class="btn" id="a-save">Начислить</button>
+        <label class="field"><span id="a-label">Сума рейка, грн</span><input type="number" id="a-value" value="1000" /></label>
+        <label class="field" id="a-reason-field" hidden><span>Підпис в історії</span><input id="a-reason" value="Нарахування адміністратором" /></label>
+        <button class="btn" id="a-save">Нарахувати</button>
       `);
 
       const mode = sheet.querySelector("#a-mode");
       mode.onchange = () => {
         const manual = mode.value === "manual";
         sheet.querySelector("#a-label").textContent = manual
-          ? "Количество Prime Coin (минус — списание)"
+          ? "Кількість Prime Coin (мінус — списання)"
           : mode.value === "rake"
-          ? "Сумма рейка, грн"
-          : "Сумма депозита, грн";
+          ? "Сума рейка, грн"
+          : "Сума депозиту, грн";
         sheet.querySelector("#a-reason-field").hidden = !manual;
       };
 
@@ -753,7 +753,7 @@ function bindUsers() {
             },
           });
           closeSheet();
-          toast(data.coins ? `Начислено ${fmt(data.coins)} PC` : "Баланс обновлён", "good");
+          toast(data.coins ? `Нараховано ${fmt(data.coins)} PC` : "Баланс оновлено", "good");
           loadPage();
         } catch (err) {
           e.target.disabled = false;
@@ -769,15 +769,15 @@ function viewSettings() {
   const s = state.settings;
   return `
     <div class="rec">
-      <p class="hint" style="margin-top:0">Проценты применяются при начислении за рейк и депозит. Курс используется для расчёта суммы к оплате при покупке Prime Coin.</p>
+      <p class="hint" style="margin-top:0">Відсотки застосовуються при нарахуванні за рейк і депозит. Курс використовується для розрахунку суми до сплати при купівлі Prime Coin.</p>
       <div class="grid2">
-        <label class="field"><span>% от рейка</span><input type="number" id="s-rake" value="${esc(s.rake_percent)}" /></label>
-        <label class="field"><span>% от депозита</span><input type="number" id="s-deposit" value="${esc(s.deposit_percent)}" /></label>
+        <label class="field"><span>% від рейка</span><input type="number" id="s-rake" value="${esc(s.rake_percent)}" /></label>
+        <label class="field"><span>% від депозиту</span><input type="number" id="s-deposit" value="${esc(s.deposit_percent)}" /></label>
       </div>
       <label class="field"><span>Курс: 1 Prime Coin = X грн</span><input type="number" step="0.1" id="s-rate" value="${esc(s.coin_rate)}" /></label>
-      <label class="field"><span>Название клуба</span><input id="s-club" value="${esc(s.club_name)}" /></label>
-      <label class="field"><span>Текст при покупке Prime Coin</span><textarea id="s-note">${esc(s.buy_note)}</textarea></label>
-      <button class="btn" id="saveSettings">Сохранить настройки</button>
+      <label class="field"><span>Назва клубу</span><input id="s-club" value="${esc(s.club_name)}" /></label>
+      <label class="field"><span>Текст при купівлі Prime Coin</span><textarea id="s-note">${esc(s.buy_note)}</textarea></label>
+      <button class="btn" id="saveSettings">Зберегти налаштування</button>
     </div>`;
 }
 
@@ -798,7 +798,7 @@ function bindSettings() {
         },
       });
       state.settings = data.settings;
-      toast("Настройки сохранены", "good");
+      toast("Налаштування збережено", "good");
     } catch (err) {
       fail(err);
     } finally {
@@ -846,8 +846,8 @@ async function loadPage() {
   } catch (err) {
     root.innerHTML = `<div class="empty">${
       err?.error === "not_admin"
-        ? "У вас нет прав администратора.<br/>Добавьте свой Telegram ID в переменную ADMIN_IDS."
-        : "Откройте админ-панель через Telegram-бота."
+        ? "У вас немає прав адміністратора.<br/>Додайте свій Telegram ID у змінну ADMIN_IDS."
+        : "Відкрийте адмін-панель через Telegram-бота."
     }</div>`;
   }
 }
